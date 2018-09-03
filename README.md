@@ -1,6 +1,10 @@
 # airtelmock
 This is a mocked version of the Airtel App built with the purpose of showing how to add a voice interface to this app
 
+<img src="./images/AppWithSlangMic.jpeg" width="200px">
+
+<img src="./images/AppWithSlangSurface.jpeg" width="200px">
+
 This app allows 3 primary functionality -
 
 * Showing balance
