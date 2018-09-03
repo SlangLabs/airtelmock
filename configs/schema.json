@@ -1,0 +1,207 @@
+{
+    "types": [
+        {
+            "name": "Boolean",
+            "$EntityType$": "enumEntityType",
+            "values": [
+                {
+                    "identity": "Yes",
+                    "synonyms": [
+                        "yeah"
+                    ]
+                },
+                {
+                    "identity": "No",
+                    "synonyms": [
+                        "nope",
+                        "nah"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "TripType",
+            "$EntityType$": "enumEntityType",
+            "values": [
+                {
+                    "identity": "Single",
+                    "synonyms": [
+                        "One way"
+                    ]
+                },
+                {
+                    "identity": "Round",
+                    "synonyms": [
+                        "Round Trip"
+                    ]
+                }
+            ]
+        }
+    ],
+    "intents": [
+        {
+            "entities": [
+                {
+                    "name": "source",
+                    "type": "std.geo.city",
+                    "default": "",
+                    "prompts": [
+                        ""
+                    ],
+                    "required": false,
+                    "list": false
+                },
+                {
+                    "name": "destination",
+                    "type": "std.geo.city",
+                    "default": "",
+                    "prompts": [
+                        "Where are you flying out of?"
+                    ],
+                    "required": true,
+                    "list": false
+                },
+                {
+                    "name": "travel_date",
+                    "type": "std.date",
+                    "default": "",
+                    "prompts": [
+                        "When do you want to travel?"
+                    ],
+                    "required": true,
+                    "list": false
+                }
+            ],
+            "examples": [
+                [
+                    {
+                        "text": "Book a flight from",
+                        "entity": null
+                    },
+                    {
+                        "text": "chennai",
+                        "entity": "source"
+                    },
+                    {
+                        "text": "to",
+                        "entity": null
+                    },
+                    {
+                        "text": "Bangalore",
+                        "entity": "destination"
+                    },
+                    {
+                        "text": "tomorrow",
+                        "entity": "travel_date"
+                    },
+                    {
+                        "text": "",
+                        "entity": null
+                    }
+                ],
+                [
+                    {
+                        "text": "Book a flight to",
+                        "entity": null
+                    },
+                    {
+                        "text": "Bangalore",
+                        "entity": "destination"
+                    },
+                    {
+                        "text": "tomorrow",
+                        "entity": "travel_date"
+                    },
+                    {
+                        "text": "",
+                        "entity": null
+                    }
+                ],
+                [
+                    {
+                        "text": "Show me flights to",
+                        "entity": null
+                    },
+                    {
+                        "text": "Bangalore",
+                        "entity": "destination"
+                    },
+                    {
+                        "text": "tomorrow",
+                        "entity": "travel_date"
+                    },
+                    {
+                        "text": "",
+                        "entity": null
+                    }
+                ]
+            ],
+            "name": "book_flight",
+            "confirmations": []
+        },
+        {
+            "entities": [
+                {
+                    "name": "trip_type",
+                    "type": "std.integer",
+                    "default": "",
+                    "prompts": [
+                        "How many adults are travelling?"
+                    ],
+                    "required": true,
+                    "list": false
+                },
+                {
+                    "name": "adult_count",
+                    "type": "std.integer",
+                    "default": "",
+                    "prompts": [
+                        "How many adults are travelling?"
+                    ],
+                    "required": true,
+                    "list": false
+                },
+                {
+                    "name": "child_count",
+                    "type": "std.integer",
+                    "default": "",
+                    "prompts": [
+                        "How many kids, between 3 to 12 yrs, are travelling with you?"
+                    ],
+                    "required": true,
+                    "list": false
+                },
+                {
+                    "name": "infant_count",
+                    "type": "std.integer",
+                    "default": "",
+                    "prompts": [
+                        "How many infants are travelling with you?"
+                    ],
+                    "required": true,
+                    "list": false
+                },
+                {
+                    "name": "child_or_infant",
+                    "type": "Boolean",
+                    "default": "",
+                    "prompts": [
+                        "Any children travelling with you?"
+                    ],
+                    "required": true,
+                    "list": false
+                }
+            ],
+            "examples": [
+                [
+                    {
+                        "text": "Trigger this intent",
+                        "entity": null
+                    }
+                ]
+            ],
+            "name": "flight_details",
+            "confirmations": []
+        }
+    ]
+}
