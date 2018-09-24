@@ -57,12 +57,17 @@ public class VoiceInterface {
                 }
             );
 
-        SlangApplication.setDefaultContinuationMode(SlangSession.ContinuationMode.CONTINUE);
+//        SlangApplication.setDefaultContinuationMode(SlangSession.ContinuationMode.PAUSE);
     }
 
     private static void registerActions() throws SlangApplicationUninitializedException {
         // Register the handler for the "roaming" intent
         SlangApplication.getIntentDescriptor("roaming").setResolutionAction(new DefaultResolvedIntentAction() {
+            public SlangSession.Status onIntentResolutionBegin(SlangResolvedIntent intent, SlangSession session) {
+                intent.getCompletionStatement().overrideAffirmative("It will cost your Rs 149. Please click yes to proceed");
+                return session.success();
+            }
+
             @Override
             public SlangSession.Status onEntityUnresolved(SlangEntity entity, final SlangSession session) {
                 boolean pause = false;
@@ -124,6 +129,7 @@ public class VoiceInterface {
                             ActivityDetector.ACTIVITY_MODE,
                             ActivityDetector.MODE_CONFIRM_ROAMING
                         );
+                        slangSession.setContinuationMode(SlangSession.ContinuationMode.PAUSE);
                         break;
 
                     case "domestic":
@@ -160,7 +166,7 @@ public class VoiceInterface {
 
                 appContext.startActivity(i);
 
-                session.setContinuationMode(SlangSession.ContinuationMode.CONTINUE);
+//                session.setContinuationMode(SlangSession.ContinuationMode.CONTINUE);
 
                 return session.success();
             }
