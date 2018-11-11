@@ -4,6 +4,8 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="todo">TODO</string>
-    <string name="appId">638eb3124b0545f49d0764e68a75352b</string>
-    <string name="authKey">a36cb1a0101746ea8f16be5fcfac393c</string>
+    <string name="appId_rel">968fd6e6b1a347beb7b21b966f6b3c9d</string>
+    <string name="authKey_rel">c80525dd5fa146d6a3a1aba91fc5d6b9</string>
+    <string name="appId_dev">1c61681a30874e7598130d9f08191d6a</string>
+    <string name="authKey_dev">d38d14ebfe0446b786994109f6cbef43</string>
 </resources>
