@@ -40,7 +40,7 @@ public class RoamingPacksActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                SlangApplication.getScreenContext().setEntity("pack", entityNames[i]);
+                SlangApplication.getScreenContext().notifyEntityResolved("pack", entityNames[i]);
             }
         });
     }
