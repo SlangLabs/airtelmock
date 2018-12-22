@@ -147,11 +147,6 @@ public class VoiceInterface {
         });
 
         SlangApplication.getIntentDescriptor("balance").setResolutionAction(new DefaultResolvedIntentAction() {
-            @Override
-            public SlangSession.Status onIntentResolutionBegin(SlangResolvedIntent intent, SlangSession session) {
-                return session.success();
-            }
-
             @NonNull
             @Override
             public SlangSession.Status action(SlangResolvedIntent intent, SlangSession session) {
