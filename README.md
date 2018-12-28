@@ -1,7 +1,8 @@
 # airtelmock
-This is a mocked version of the Airtel App built with the purpose of showing how to add a voice interface to this app
 
-Here is a [![demo](./images/AppWithSlangMic.jpeg)](https://www.youtube.com/watch?v=pDAWCqJep9U)
+[![demo](./images/airtelmock_youtube.png)](https://www.youtube.com/watch?v=pDAWCqJep9U)
+
+This is a mocked version of the Airtel App built with the purpose of showing how to add a voice interface to this app
 
 <img src="./images/AppWithSlangMic.jpeg" width="200px"> <img src="./images/AppWithSlangSurface.jpeg" width="200px">
 
