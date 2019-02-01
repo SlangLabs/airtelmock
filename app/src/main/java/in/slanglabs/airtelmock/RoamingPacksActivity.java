@@ -10,9 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import in.slanglabs.platform.application.SlangApplication;
 
 public class RoamingPacksActivity extends AppCompatActivity {
     Integer[] imageIds = {
@@ -39,9 +36,7 @@ public class RoamingPacksActivity extends AppCompatActivity {
         lv.setAdapter(new PacksAdapter(this, R.layout.listitem_packs, imageIds));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                SlangApplication.getScreenContext().notifyEntityResolved("pack", entityNames[i]);
-            }
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {}
         });
     }
 

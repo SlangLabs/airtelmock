@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (image != null) {
             image.setImageResource(screen);
+            image.setTag(screen);
         }
 
         return;
