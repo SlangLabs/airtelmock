@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 
 import in.slanglabs.platform.SlangBuddy;
 import in.slanglabs.platform.SlangBuddyOptions;
@@ -20,49 +19,34 @@ import in.slanglabs.platform.ui.SlangBuiltinUI;
 
 import static in.slanglabs.platform.action.SlangAction.Status.SUCCESS;
 
-public class VoiceInterface {
-    private static VoiceInterface sInstance = new VoiceInterface();
-    private static Context sAppContext;
+class VoiceInterface {
+    private static final String TAG = VoiceInterface.class.getSimpleName();
 
     static void init(final Application appContext) {
-        sAppContext = appContext;
-
-        SlangBuddyOptions options = new SlangBuddyOptions.Builder()
-                .setContext(appContext)
-                .setBuddyId(appContext.getResources().getString(getBuddyId()))
-                .setAPIKey(appContext.getResources().getString(getAPIKey()))
-                .setListener(new BuddyListener())
-                .setIntentAction(new V1Action(sAppContext))
-                .setRequestedLocales(SlangLocale.getSupportedLocales())
-                .setDefaultLocale(SlangLocale.LOCALE_ENGLISH_IN)
-                .setConfigOverrides(getConfigOverrides())
-                .build();
-        SlangBuddy.initialize(options);
-    }
-
-    private static Map<String, Object> getConfigOverrides() {
-        HashMap<String, Object> config = new HashMap<>();
-        if (shouldForceDevTier()) {
-            config.put("internal.common.io.server_host", "infer-dev.slanglabs.in");
-            config.put("internal.common.io.analytics_server_host", "analytics-dev.slanglabs.in");
+        try {
+            SlangBuddyOptions options = new SlangBuddyOptions.Builder()
+                    .setContext(appContext)
+                    .setBuddyId(appContext.getResources().getString(getBuddyId()))
+                    .setAPIKey(appContext.getResources().getString(getAPIKey()))
+                    .setListener(new BuddyListener())
+                    .setIntentAction(new V1Action(appContext))
+                    .setRequestedLocales(SlangLocale.getSupportedLocales())
+                    .setDefaultLocale(SlangLocale.LOCALE_ENGLISH_IN)
+                    .build();
+            SlangBuddy.initialize(options);
+        } catch (SlangBuddyOptions.InvalidOptionException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+        } catch (SlangBuddy.InsufficientPrivilegeException e) {
+            Log.e(TAG, e.getLocalizedMessage());
         }
-        return config;
     }
 
     private static int getBuddyId() {
-        return shouldForceDevTier()
-                ? R.string.appId_dev
-                : BuildConfig.DEBUG ? R.string.appId_dev : R.string.appId_rel;
+        return BuildConfig.DEBUG ? R.string.appId_dev : R.string.appId_rel;
     }
 
     private static int getAPIKey() {
-        return shouldForceDevTier()
-                ? R.string.authKey_dev
-                : BuildConfig.DEBUG ? R.string.authKey_dev : R.string.authKey_rel;
-    }
-
-    private static boolean shouldForceDevTier() {
-        return true;
+        return BuildConfig.DEBUG ? R.string.authKey_dev : R.string.authKey_rel;
     }
 
     private static class V1Action implements SlangIntentAction {
@@ -87,14 +71,14 @@ public class VoiceInterface {
         }
 
         private void handleBalance(SlangIntent intent) {
-            Intent i = new Intent(sAppContext, MainActivity.class);
+            Intent i = new Intent(mContext, MainActivity.class);
 
             i.putExtra(
                 ActivityDetector.ACTIVITY_MODE,
                 ActivityDetector.MODE_BALANCE
             );
 
-            sAppContext.startActivity(i);
+            mContext.startActivity(i);
         }
 
         private void handleRoaming(SlangIntent intent) {
@@ -154,11 +138,17 @@ public class VoiceInterface {
         }
     }
 
-    // This is still experimental and unsupported. The APIs used here might change
+    // This is experimental and unsupported. The APIs used here might change
     private static class MultiStepAction implements SlangMultiStepIntentAction {
+        private final Context mContext;
+
+        MultiStepAction(Context context) {
+            mContext = context;
+        }
+
         @Override
         public Status action(SlangIntent intent, SlangSession context) {
-            Intent i = new Intent(sAppContext, MainActivity.class);
+            Intent i = new Intent(mContext, MainActivity.class);
 
             switch (intent.getEntity("region").getValue()) {
                 case "international":
@@ -176,7 +166,7 @@ public class VoiceInterface {
                     break;
             }
 
-            sAppContext.startActivity(i);
+            mContext.startActivity(i);
             return SUCCESS;
         }
 
@@ -199,14 +189,14 @@ public class VoiceInterface {
             switch(entity.getIntent().getEntity("region").getValue()) {
                 case "international":
                     Intent i = new Intent(
-                            sAppContext,
+                            mContext,
                             MainActivity.class
                     );
                     i.putExtra(
                             ActivityDetector.ACTIVITY_MODE,
                             ActivityDetector.MODE_COUNTRY_ROAMING
                     );
-                    sAppContext.startActivity(i);
+                    mContext.startActivity(i);
                     break;
 
                 case "domestic":
@@ -216,7 +206,7 @@ public class VoiceInterface {
         }
 
         private void handlePack(SlangEntity entity) {
-            sAppContext.startActivity(new Intent(sAppContext, RoamingPacksActivity.class));
+            mContext.startActivity(new Intent(mContext, RoamingPacksActivity.class));
         }
 
         @Override
@@ -232,10 +222,21 @@ public class VoiceInterface {
     private static class BuddyListener implements SlangBuddy.Listener {
         @Override
         public void onInitialized() {
-            SlangBuddy.getBuiltinUI().setPosition(SlangBuiltinUI.SlangTriggerPosition.LEFT_BOTTOM);
+            try {
+                SlangBuddy.getBuiltinUI().setPosition(SlangBuiltinUI.SlangUIPosition.LEFT_BOTTOM);
+            } catch (SlangBuddy.UninitializedUsageException e) {
+                // Shouldn't happen here
+                Log.e(TAG, e.getLocalizedMessage());
+            }
         }
 
         @Override
         public void onInitializationFailed(SlangBuddy.InitializationError e) {}
+
+        @Override
+        public void onLocaleChanged(Locale locale) {}
+
+        @Override
+        public void onLocaleChangeFailed(Locale locale, SlangBuddy.LocaleChangeError localeChangeError) {}
     }
 }
